@@ -10,9 +10,7 @@ from games.arkanoid.communication import ( \
 def ml_loop():
     """
     The main loop of the machine learning process
-
     This loop is run in a separate process, and communicates with the game process.
-
     Note that the game process won't wait for the ml process to generate the
     GameInstruction. It is possible that the frame of the GameInstruction
     is behind of the current frame in the game process. Try to decrease the fps
@@ -49,4 +47,11 @@ def ml_loop():
             comm.send_instruction(scene_info.frame, PlatformAction.SERVE_TO_LEFT)
             ball_served = True
         else:
-            comm.send_instruction(scene_info.frame, PlatformAction.MOVE_LEFT)
+            ball_x=scene_info.ball[0]
+            Platform_x=scene_info.platform[0]
+            if ball_x>Platform_x:
+                comm.send_instruction(scene_info.frame, PlatformAction.MOVE_RIGHT)
+            elif ball_x<Platform_x:
+                comm.send_instruction(scene_info.frame, PlatformAction.MOVE_LEFT)
+            else :
+                comm.send_instruction(scene_info.frame, PlatformAction.NONE)
